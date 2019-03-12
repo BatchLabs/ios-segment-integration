@@ -184,7 +184,7 @@ NSString *const SEGBatchIntegrationSettingsAdvancedDeviceInformation = @"canUseA
     NSString *eventName = [self formatEventName:payload.event];
     if (eventName && [eventName length] > 0) {
         NSString *title = payload.properties[@"title"];
-        if (![title isKindOfClass:[NSString class]]) {
+        if (![title isKindOfClass:[NSString class]] || ![title isKindOfClass:[NSNumber class]]) {
             title = nil;
         }
         [BatchUser trackEvent:eventName withLabel:title];
