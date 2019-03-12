@@ -181,14 +181,34 @@ NSString *const SEGBatchIntegrationSettingsAdvancedDeviceInformation = @"canUseA
 
 - (void)track:(SEGTrackPayload *)payload
 {
+    NSString *titleKey = @"title";
     NSString *eventName = [self formatEventName:payload.event];
+    
     if (eventName && [eventName length] > 0) {
-        NSString *title = payload.properties[@"title"];
-        if (![title isKindOfClass:[NSString class]] || ![title isKindOfClass:[NSNumber class]]) {
+        NSString *title = payload.properties[titleKey];
+        if (![title isKindOfClass:[NSString class]]) {
             title = nil;
         }
-        [BatchUser trackEvent:eventName withLabel:title];
-        SEGLog(@"[BatchUser trackEvent:%@ withLabel:%@];", eventName, title);
+        
+        NSDictionary *data = [[NSDictionary alloc] init];
+        NSDictionary *properties = payload.properties;
+        if (properties != nil) {
+            for (NSString *key in properties) {
+                NSLog(@"BatchUser data key %@ value %@", key, payload.properties[key]);
+                if (![key isEqualToString:titleKey]) {
+                    [data setValue:payload.properties[key] forKey:key];
+                }
+            }
+            NSLog(@"BatchUser data %@", data);
+        }
+        
+        if ([data count] == 0) {
+            [BatchUser trackEvent:eventName withLabel:title];
+            SEGLog(@"[BatchUser trackEvent:%@ withLabel:%@];", eventName, title);
+        } else {
+            [BatchUser trackEvent:eventName withLabel:title data:data];
+            SEGLog(@"[BatchUser trackEvent:%@ withLabel:%@ and data: %@];", eventName, title, data);
+        }
     }
     [self trackTransactionIfAny:payload];
 }

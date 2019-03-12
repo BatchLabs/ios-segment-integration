@@ -38,7 +38,7 @@
 
 /* Begin PBXFileReference section */
 		0B75375C7E82726AEBA6AC19 /* Pods-Segment-Batch_Example.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Segment-Batch_Example.release.xcconfig"; path = "Pods/Target Support Files/Pods-Segment-Batch_Example/Pods-Segment-Batch_Example.release.xcconfig"; sourceTree = "<group>"; };
-		33142509DCE6CF62D2460624 /* Segment-Batch.podspec */ = {isa = PBXFileReference; includeInIndex = 1; name = "Segment-Batch.podspec"; path = "../Segment-Batch.podspec"; sourceTree = "<group>"; };
+		33142509DCE6CF62D2460624 /* Segment-Batch.podspec */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; name = "Segment-Batch.podspec"; path = "../Segment-Batch.podspec"; sourceTree = "<group>"; };
 		34E96AA0AF9C158DC2B462F1 /* libPods-Segment-Batch_Tests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-Segment-Batch_Tests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		56A70B1054D0348A5EFF17D6 /* Pods-Segment-Batch_Tests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Segment-Batch_Tests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Segment-Batch_Tests/Pods-Segment-Batch_Tests.debug.xcconfig"; sourceTree = "<group>"; };
 		6003F58A195388D20070C39A /* Segment-Batch_Example.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Segment-Batch_Example.app"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -64,8 +64,8 @@
 		82CEF404B9E3332421FA3801 /* libPods-Segment-Batch_Example.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-Segment-Batch_Example.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		873B8AEA1B1F5CCA007FD442 /* Main.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = Main.storyboard; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		BF10CCB23CA31E5DBC02A4F4 /* Pods-Segment-Batch_Example.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Segment-Batch_Example.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Segment-Batch_Example/Pods-Segment-Batch_Example.debug.xcconfig"; sourceTree = "<group>"; };
-		C6A2A889E9DB44BECB3990CF /* README.md */ = {isa = PBXFileReference; includeInIndex = 1; name = README.md; path = ../README.md; sourceTree = "<group>"; };
-		E251E0D5996667817FE6B77A /* LICENSE */ = {isa = PBXFileReference; includeInIndex = 1; name = LICENSE; path = ../LICENSE; sourceTree = "<group>"; };
+		C6A2A889E9DB44BECB3990CF /* README.md */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = net.daringfireball.markdown; name = README.md; path = ../README.md; sourceTree = "<group>"; };
+		E251E0D5996667817FE6B77A /* LICENSE */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; name = LICENSE; path = ../LICENSE; sourceTree = "<group>"; };
 		E92E710F22175BFB9A3B0DA0 /* Pods-Segment-Batch_Tests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Segment-Batch_Tests.release.xcconfig"; path = "Pods/Target Support Files/Pods-Segment-Batch_Tests/Pods-Segment-Batch_Tests.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -246,7 +246,11 @@
 				LastUpgradeCheck = 0720;
 				ORGANIZATIONNAME = "Arnaud Barisain-Monrose";
 				TargetAttributes = {
+					6003F589195388D20070C39A = {
+						DevelopmentTeam = U5K2ETC2Y6;
+					};
 					6003F5AD195388D20070C39A = {
+						DevelopmentTeam = U5K2ETC2Y6;
 						TestTargetID = 6003F589195388D20070C39A;
 					};
 				};
@@ -466,6 +470,7 @@
 			baseConfigurationReference = BF10CCB23CA31E5DBC02A4F4 /* Pods-Segment-Batch_Example.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				DEVELOPMENT_TEAM = U5K2ETC2Y6;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Segment-Batch/Segment-Batch-Prefix.pch";
 				INFOPLIST_FILE = "Segment-Batch/Segment-Batch-Info.plist";
@@ -481,6 +486,7 @@
 			baseConfigurationReference = 0B75375C7E82726AEBA6AC19 /* Pods-Segment-Batch_Example.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				DEVELOPMENT_TEAM = U5K2ETC2Y6;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Segment-Batch/Segment-Batch-Prefix.pch";
 				INFOPLIST_FILE = "Segment-Batch/Segment-Batch-Info.plist";
@@ -496,6 +502,7 @@
 			baseConfigurationReference = 56A70B1054D0348A5EFF17D6 /* Pods-Segment-Batch_Tests.debug.xcconfig */;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
+				DEVELOPMENT_TEAM = U5K2ETC2Y6;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(SDKROOT)/Developer/Library/Frameworks",
 					"$(inherited)",
@@ -520,6 +527,7 @@
 			baseConfigurationReference = E92E710F22175BFB9A3B0DA0 /* Pods-Segment-Batch_Tests.release.xcconfig */;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
+				DEVELOPMENT_TEAM = U5K2ETC2Y6;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(SDKROOT)/Developer/Library/Frameworks",
 					"$(inherited)",
