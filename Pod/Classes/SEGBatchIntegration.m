@@ -190,16 +190,14 @@ NSString *const SEGBatchIntegrationSettingsAdvancedDeviceInformation = @"canUseA
             title = nil;
         }
         
-        NSDictionary *data = [[NSDictionary alloc] init];
+        NSMutableDictionary *data = [[NSMutableDictionary alloc] init];
         NSDictionary *properties = payload.properties;
         if (properties != nil) {
             for (NSString *key in properties) {
-                NSLog(@"BatchUser data key %@ value %@", key, payload.properties[key]);
                 if (![key isEqualToString:titleKey]) {
                     [data setValue:payload.properties[key] forKey:key];
                 }
             }
-            NSLog(@"BatchUser data %@", data);
         }
         
         if ([data count] == 0) {
@@ -210,6 +208,7 @@ NSString *const SEGBatchIntegrationSettingsAdvancedDeviceInformation = @"canUseA
             SEGLog(@"[BatchUser trackEvent:%@ withLabel:%@ and data: %@];", eventName, title, data);
         }
     }
+    
     [self trackTransactionIfAny:payload];
 }
 

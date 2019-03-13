@@ -38,11 +38,11 @@ describe(@"Batch's segment integration", ^{
         OCMExpect([batchUserMock trackEvent:@"TEST_EVENT" withLabel:@"label"]);
         OCMExpect([batchUserMock trackEvent:@"TEST_EVENT_TOO_LONG_AAAAAAAAAA" withLabel:[OCMArg isNil]]);
         OCMExpect([batchUserMock trackEvent:@"TEST_TRANSACTION" withLabel:[OCMArg isNil]]);
-//        OCMExpect([batchUserMock trackTransactionWithAmount:1.234500]);
+        OCMExpect([batchUserMock trackTransactionWithAmount:1.234500]);
         OCMExpect([batchUserMock trackEvent:@"TEST_TRANSACTION" withLabel:[OCMArg isNil]]);
-//        OCMExpect([batchUserMock trackTransactionWithAmount:1.234600]);
+        OCMExpect([batchUserMock trackTransactionWithAmount:1.234600]);
         OCMExpect([batchUserMock trackEvent:@"TEST_TRANSACTION" withLabel:[OCMArg isNil]]);
-//        OCMExpect([batchUserMock trackTransactionWithAmount:1.234700]);
+        OCMExpect([batchUserMock trackTransactionWithAmount:1.234700]);
         
         
         SEGTrackPayload *p = [[SEGTrackPayload alloc] initWithEvent:@"TEST_EVENT"
