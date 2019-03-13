@@ -194,8 +194,10 @@ NSString *const SEGBatchIntegrationSettingsAdvancedDeviceInformation = @"canUseA
         NSDictionary *properties = payload.properties;
         if (properties != nil) {
             for (NSString *key in properties) {
-                if (![key isEqualToString:titleKey] && ([key isKindOfClass:[NSString class]] || [key isKindOfClass:[NSNumber class]])) {
-                    [data setValue:payload.properties[key] forKey:key];
+                if (![key isEqualToString:titleKey]) {
+                    if (([payload.properties[key] isKindOfClass:[NSString class]] || [payload.properties[key] isKindOfClass:[NSNumber class]])) {
+                        [data setValue:payload.properties[key] forKey:key];
+                    }
                 }
             }
         }
