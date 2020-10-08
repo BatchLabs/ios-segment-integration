@@ -1,7 +1,7 @@
 XCPRETTY := xcpretty -c
 
 SDK ?= "iphonesimulator"
-DESTINATION ?= "platform=iOS Simulator,name=iPhone 7"
+DESTINATION ?= "platform=iOS Simulator,name=iPhone 11 Pro"
 PROJECT := Segment-Batch
 XC_ARGS := -scheme $(PROJECT)-Example -workspace Example/$(PROJECT).xcworkspace -sdk $(SDK) -destination $(DESTINATION) ONLY_ACTIVE_ARCH=NO
 
