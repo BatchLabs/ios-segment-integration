@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name             = 'Segment-Batch'
-  s.version          = '1.2.0'
+  s.version          = '2.0.0'
   s.summary          = "Batch.com Integration for Segment's analytics-ios library."
 
   s.description      = <<-DESC
@@ -21,6 +21,6 @@ Pod::Spec.new do |s|
 
   s.subspec 'Standard' do |std|
     std.source_files = 'Pod/Classes/**/*'
-    std.dependency 'Batch', '~> 1.13'
+    std.dependency 'Batch', '~> 1.15'
   end
 end
