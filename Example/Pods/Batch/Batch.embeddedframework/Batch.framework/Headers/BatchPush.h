@@ -3,7 +3,7 @@
 //  Batch
 //
 //  https://batch.com
-//  Copyright (c) 2014 Batch SDK. All rights reserved.
+//  Copyright (c) Batch SDK. All rights reserved.
 //
 
 #import <Foundation/Foundation.h>
@@ -19,6 +19,13 @@ FOUNDATION_EXPORT NSString *const BatchPushReceivedNotification;
  Key that Batch will read the placeholder from when converting a UIUserNotificationAction into a UNNotificationAction
  */
 FOUNDATION_EXPORT NSString *const BatchUserActionInputTextFieldPlaceholderKey;
+
+/**
+ Notification sent by Batch Push when the alert view requesting users to allow push notifications was dismissed.
+ Notification's userInfo will contain a BatchPushUserDidAcceptKey regarding the choice made by the user, whose value is a boolean in an NSNumber.
+ */
+FOUNDATION_EXPORT NSString *const BatchPushUserDidAnswerAuthorizationRequestNotification;
+FOUNDATION_EXPORT NSString *const BatchPushUserDidAcceptKey;
 
 /**
  Remote notification types wrapper.
@@ -160,6 +167,9 @@ typedef NS_ENUM(NSUInteger, BatchNotificationSource) {
  
  If your goal is to implement a custom deeplink format, you should see Batch.deeplinkDelegate which allows you to manually handle the deeplink string, but doesn't
  put the burden of parsing the notification payload on you.
+ 
+ Please note that setting this to false will DISABLE the deeplink delegate, leaving the handling of the link
+ entirely up to you.
  
  @warning If Batch is set to handle your deeplinks, it will *automatically* call the fetch completion handler (if applicable) with UIBackgroundFetchResultNewData.
  */

@@ -3,169 +3,14 @@
 //  Batch
 //
 //  https://batch.com
-//  Copyright (c) 2016 Batch SDK. All rights reserved.
+//  Copyright (c) Batch SDK. All rights reserved.
 //
 
 #import <Foundation/Foundation.h>
 
 #import "BatchActions.h"
 
-/**
- Represents an In-App Message content
- This protocol itself isn't really useful: you will need to safely cast it to an instance, such as BatchInterstitialMessageContent or BatchAlertMessageContent
- */
-@protocol BatchInAppMessageContent <NSObject>
-
-@end
-
-/**
- Model describing an alert message's CTA
- */
-@interface BatchAlertMessageCTA : NSObject
-
-@property (nullable, readonly) NSString* label;
-@property (nullable, readonly) NSString* action;
-@property (nullable, readonly) NSDictionary* args;
-
-@end
-
-/**
- Model describing the content of an alert message
- */
-@interface BatchAlertMessageContent : NSObject <BatchInAppMessageContent>
-
-@property (nullable, readonly) NSString* trackingIdentifier;
-@property (nullable, readonly) NSString* title;
-@property (nullable, readonly) NSString* body;
-@property (nullable, readonly) NSString* cancelLabel;
-@property (nullable, readonly) BatchAlertMessageCTA* acceptCTA;
-
-@end
-
-/**
- Model describing an interstitial message's CTA
- */
-@interface BatchInterstitialMessageCTA : NSObject
-
-@property (nullable, readonly) NSString* label;
-@property (nullable, readonly) NSString* action;
-@property (nullable, readonly) NSDictionary* args;
-
-@end
-
-/**
- Model describing the content of an interstitial message
- */
-@interface BatchInterstitialMessageContent : NSObject <BatchInAppMessageContent>
-
-@property (nullable, readonly) NSString* trackingIdentifier;
-@property (nullable, readonly) NSString* header;
-@property (nullable, readonly) NSString* title;
-@property (nullable, readonly) NSString* body;
-@property (nullable, readonly) NSArray<BatchInterstitialMessageCTA*>* ctas;
-@property (nullable, readonly) NSString* mediaURL;
-@property (nullable, readonly) NSString* mediaAccessibilityDescription;
-@property (readonly) BOOL showCloseButton;
-
-@end
-
-/**
- Model describing a banner message's global tap action
- */
-@interface BatchBannerMessageAction : NSObject
-
-@property (nullable, readonly) NSString* action;
-@property (nullable, readonly) NSDictionary* args;
-
-@end
-
-/**
- Model describing a banner message's CTA
- */
-@interface BatchBannerMessageCTA : NSObject
-
-@property (nullable, readonly) NSString* label;
-@property (nullable, readonly) NSString* action;
-@property (nullable, readonly) NSDictionary* args;
-
-@end
-
-/**
- Model describing the content of a banner message
- */
-@interface BatchBannerMessageContent : NSObject <BatchInAppMessageContent>
-
-@property (nullable, readonly) NSString* trackingIdentifier;
-@property (nullable, readonly) NSString* title;
-@property (nullable, readonly) NSString* body;
-@property (nullable, readonly) NSArray<BatchBannerMessageCTA*>* ctas;
-@property (nullable, readonly) BatchBannerMessageAction* globalTapAction;
-@property (nullable, readonly) NSString* mediaURL;
-@property (nullable, readonly) NSString* mediaAccessibilityDescription;
-@property (readonly) BOOL showCloseButton;
-
-// Expressed in seconds, 0 if should not automatically dismiss
-@property (readonly) NSTimeInterval automaticallyDismissAfter;
-
-@end
-
-/**
- Protocol representing a Batch Messaging VC.
- */
-@protocol BatchMessagingViewController <NSObject>
-
-@property (readonly) BOOL shouldDisplayInSeparateWindow;
-
-@end
-
-/**
- Represents a Batch Messaging message
- */
-@interface BatchMessage : NSObject <NSCopying, BatchUserActionSource>
-
-@end
-
-/**
- Represents a Batch Messaging message coming from an In-App Campaign
- */
-@interface BatchInAppMessage : BatchMessage
-
-/**
- User defined custom payload
- */
-@property (nullable, readonly) NSDictionary<NSString*, NSObject*>* customPayload;
-
-/**
- In-App message's visual contents
- 
- Since the content can greatly change between formats, you will need to cast it to one of the classes
- confirming to the BatchInAppMessageContent protocol, such as BatchAlertMessageContent or BatchInterstitialMessageContent.
- 
- More types might be added in the future, so don't make any assuptions on the kind of class returned by this property.
- 
- Can be nil if an error occurred or if not applicable
- */
-@property (nullable, readonly) id<BatchInAppMessageContent> content;
-
-/**
- Get the campaign token. This is the same token as you see when opening the In-App Campaign in your browser, when on the dashboard.
- Can be nil.
- */
- @property (nullable, readonly) NSString *campaignToken;
-
-@end
-
-/**
- Represents a Batch Messaging message coming from a push
- */
-@interface BatchPushMessage : BatchMessage
-
-/**
- Original push payload
- */
-@property (nonnull, readonly) NSDictionary<NSString*, NSObject*>* pushPayload;
-
-@end
+@class BatchInAppMessage, BatchMessage, BatchPushMessage, BatchMessageAction;
 
 /**
  Implement this protocol if you want to be notified of what happens to the messaging view (for example, perform some analytics on show/hide).
@@ -179,6 +24,38 @@
  @param messageIdentifier Analytics message identifier string. Can be nil.
  */
 - (void)batchMessageDidAppear:(NSString* _Nullable)messageIdentifier;
+
+/**
+ Called when the message view was dismissed by a user interaction (close button tap, swipe gesture...)
+ @param messageIdentifier Analytics message identifier string. Can be nil.
+ */
+- (void)batchMessageWasCancelledByUserAction:(NSString* _Nullable)messageIdentifier NS_SWIFT_NAME(batchMessageWasCancelledByUserAction(_:));
+
+/**
+ Called when the message view was dismissed automatically after the auto closing countdown.
+ @param messageIdentifier Analytics message identifier string. Can be nil.
+ */
+- (void)batchMessageWasCancelledByAutoclose:(NSString* _Nullable)messageIdentifier NS_SWIFT_NAME(batchMessageWasCancelledByAutoclose(_:));
+
+/**
+ Called when Batch needs to present a message in automatic mode.
+
+ Implement this method if you need to specify the view controller that will present Batch content.
+ If you return nil, or don't implement this method, Batch will default to its normal presentation behaviour and use the topmost presented controller of your app's key window's root controller.
+ @return The view controller to present Batch content on. Batch will display its controller modally, therefore the view controller you return must be capable of presenting a modal view controller.
+ @note This method will not be called for some messages that need to be presented in their own window.
+ */
+- (UIViewController* _Nullable)presentingViewControllerForBatchUI;
+
+/**
+ Called when the message view will be dismissed due to the user pressing a CTA or the global tap action.
+ @param action        Action that will be performed. Fields can be nil if the action was only to dismiss the message on tap.
+                      DO NOT run the action yourself: the SDK will automatically do it.
+ @param index         Index of the action/CTA. If the action comes from the "global tap action", the index will be BatchMessageGlobalActionIndex
+                      If the index is greater than or equal to zero, you can cast the action to BatchMessageCTA to get the CTA's label.
+ @param identifier    Analytics message identifier string. Can be nil.
+ */
+- (void)batchMessageDidTriggerAction:(BatchMessageAction * _Nonnull)action messageIdentifier:(NSString * _Nullable)identifier actionIndex:(NSInteger)index;
 
 /**
  Called when the message view disappeared from the screen.
@@ -220,9 +97,9 @@
  Note that if automatic mode is enabled, manual integration methods will not work.
  In-App messaging is not affected by this. If you want to manually display the In-App message, call setDelegate: with a delegate that implement batchInAppMessageReady:
  
- @param setAutomaticMode Whether to enable automatic mode or not
+ @param isAutomaticModeOn Whether to enable automatic mode or not
  */
-+ (void)setAutomaticMode:(BOOL)setAutomaticMode;
++ (void)setAutomaticMode:(BOOL)isAutomaticModeOn NS_SWIFT_NAME(setAutomaticMode(on:));
 
 /**
  Toogles whether BatchMessaging should enter its "do not disturb" (DnD) mode or exit it.
@@ -265,11 +142,31 @@
  Override the font used in message views.
  Not applicable for standard alerts.
  
+ If a variant is missing but there is a base font present, the SDK will fallback on the base fond you provided rather than the system one. This can lead to missing styles.
+ Setting a nil base font override will disable all other overrides.
+ 
  @param font UIFont to use for normal text. Use 'nil' to revert to the system font.
  
  @param boldFont UIFont to use for bold text. Use 'nil' to revert to the system font.
  */
 + (void)setFontOverride:(nullable UIFont*)font boldFont:(nullable UIFont*)boldFont;
+
+/**
+ Override the font used in message views.
+ Not applicable for standard alerts.
+ 
+ If a variant is missing but there is a base font present, the SDK will fallback on the base fond you provided rather than the system one. This can lead to missing styles.
+ Setting a nil base font override will disable all other overrides.
+ 
+ @param font UIFont to use for normal text. Use 'nil' to revert to the system font.
+ 
+ @param boldFont UIFont to use for bold text. Use 'nil' to revert to the system font.
+ 
+ @param italicFont UIFont to use for italic text. Use 'nil' to revert to the system font.
+ 
+ @param boldItalicFont UIFont to use for bolditalic text. Use 'nil' to revert to the system font.
+ */
++ (void)setFontOverride:(nullable UIFont*)font boldFont:(nullable UIFont*)boldFont italicFont:(nullable UIFont*)italicFont boldItalicFont:(nullable UIFont*)boldItalicFont;
 
 /*!
  Get a message model from the push payload, if it contains a valid Batch message.

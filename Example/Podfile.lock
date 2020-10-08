@@ -1,14 +1,14 @@
 PODS:
-  - Analytics (3.6.9)
-  - Batch (1.13.0)
+  - Analytics (4.0.5)
+  - Batch (1.15.2)
   - Expecta (1.0.6)
-  - OCMock (3.4.2)
-  - Segment-Batch (1.1.0):
-    - Analytics (~> 3.0)
-    - Segment-Batch/Standard (= 1.1.0)
-  - Segment-Batch/Standard (1.1.0):
-    - Analytics (~> 3.0)
-    - Batch (~> 1.13)
+  - OCMock (3.7.1)
+  - Segment-Batch (2.0.0):
+    - Analytics (~> 4.0)
+    - Segment-Batch/Standard (= 2.0.0)
+  - Segment-Batch/Standard (2.0.0):
+    - Analytics (~> 4.0)
+    - Batch (~> 1.15)
   - Specta (1.0.7)
 
 DEPENDENCIES:
@@ -18,7 +18,7 @@ DEPENDENCIES:
   - Specta
 
 SPEC REPOS:
-  https://github.com/cocoapods/specs.git:
+  trunk:
     - Analytics
     - Batch
     - Expecta
@@ -30,13 +30,13 @@ EXTERNAL SOURCES:
     :path: "../"
 
 SPEC CHECKSUMS:
-  Analytics: 6541ce337e99d9f7a2240a8b3953940a7be5f998
-  Batch: d461eedc82d08c0f1cc72c23b8137a2ea46c9f98
+  Analytics: 4bcf052c91e1f3339219e83d6a036fb2bd7c218d
+  Batch: cf8eb2939d662b1d68319d814528df7aef29f348
   Expecta: 3b6bd90a64b9a1dcb0b70aa0e10a7f8f631667d5
-  OCMock: ebe9ee1dca7fbed0ff9193ac0b3e2d8862ea56f6
-  Segment-Batch: 1cf84af44c8d6a1e6e42f84e64e85012c1b5f4c2
+  OCMock: 75fbeaa46a9b11f8c182bbb1d1f7e9a35ccc9955
+  Segment-Batch: ef1ed13f3efdb06cc96645469fbe8d8c42308de4
   Specta: 3e1bd89c3517421982dc4d1c992503e48bd5fe66
 
-PODFILE CHECKSUM: 7cff142cd7228d34d9166c8f2933d7ad3cb64a8c
+PODFILE CHECKSUM: 22c75e7343208c508b3c2c368cc7ab3cb5bc8e39
 
-COCOAPODS: 1.5.3
+COCOAPODS: 1.9.3

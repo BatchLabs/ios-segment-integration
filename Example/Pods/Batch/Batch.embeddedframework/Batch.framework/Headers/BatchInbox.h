@@ -3,7 +3,7 @@
 //  Batch
 //
 //  https://batch.com
-//  Copyright (c) 2017 Batch SDK. All rights reserved.
+//  Copyright (c) Batch SDK. All rights reserved.
 //
 
 #import <Foundation/Foundation.h>
@@ -50,6 +50,13 @@
  Flag indicating whether this notification is unread or not
  */
 @property (nonatomic, readonly) BOOL isUnread;
+
+/**
+ Flag indicating whether this notification is deleted or not.
+ 
+ This might change if you hold a pointer to a notification that you asked to be deleted
+ */
+@property (nonatomic, readonly) BOOL isDeleted;
 
 /**
  The push notification's source, indicating what made Batch send it. It can come from a push campaign via the API or the dashboard, or from the transactional API, for example.
@@ -149,6 +156,14 @@
  Note that you will have to call allFetchedNotifications again to update the isUnread status of your copy of the notifications. If you call fetchNewNotifications: right away (or get a new BatchInboxFetcher instance), you might have notifications that you've marked as read come back to an unread state, since the server may have not processed the request yet.
  */
 - (void)markAllNotificationsAsRead;
+
+/**
+ Mark a specific notification as deleted.
+ The notification you provide will see its isUnread property updated.
+ 
+ If you call fetchNewNotifications: right away (or get a new BatchInboxFetcher instance), you might have notifications that you've marked as deleted come back, since the server may have not processed the request yet.
+ */
+- (void)markNotificationAsDeleted:(nonnull BatchInboxNotificationContent*)notification;
 
 @end
 

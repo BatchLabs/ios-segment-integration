@@ -3,7 +3,7 @@
 //  Batch
 //
 //  https://batch.com
-//  Copyright (c) 2018 Batch SDK. All rights reserved.
+//  Copyright (c) Batch SDK. All rights reserved.
 //
 
 #import <Foundation/Foundation.h>
@@ -63,6 +63,14 @@ NS_ASSUME_NONNULL_BEGIN
  @param key Attribute key. Should be made of letters, numbers or underscores ([a-z0-9_]) and can't be longer than 30 characters.
  */
 - (void)putString:(NSString*)value forKey:(NSString*)key;
+
+/**
+Add a date attribute for the specified key.
+
+@param value Date value to add. Can't be nil.
+@param key Attribute key. Should be made of letters, numbers or underscores ([a-z0-9_]) and can't be longer than 30 characters.
+*/
+- (void)putDate:(NSDate*)value forKey:(NSString*)key;
 
 @end
 

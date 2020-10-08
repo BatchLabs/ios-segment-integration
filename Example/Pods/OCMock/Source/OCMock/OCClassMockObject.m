@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2005-2016 Erik Doernenburg and contributors
+ *  Copyright (c) 2005-2020 Erik Doernenburg and contributors
  *
  *  Licensed under the Apache License, Version 2.0 (the "License"); you may
  *  not use these files except in compliance with the License. You may obtain
@@ -27,7 +27,9 @@
 
 - (id)initWithClass:(Class)aClass
 {
-    NSParameterAssert(aClass != nil);
+	if(aClass == Nil)
+		[NSException raise:NSInvalidArgumentException format:@"Class cannot be Nil."];
+
 	[super init];
 	mockedClass = aClass;
     [self prepareClassForClassMethodMocking];
@@ -42,7 +44,7 @@
 
 - (NSString *)description
 {
-	return [NSString stringWithFormat:@"OCMockObject(%@)", NSStringFromClass(mockedClass)];
+	return [NSString stringWithFormat:@"OCClassMockObject(%@)", NSStringFromClass(mockedClass)];
 }
 
 - (Class)mockedClass
@@ -50,27 +52,32 @@
 	return mockedClass;
 }
 
+
 #pragma mark  Extending/overriding superclass behaviour
 
 - (void)stopMocking
 {
     if(originalMetaClass != nil)
     {
-        /* The mocked class has the meta class of a dynamically created subclass as its meta class,
-           but we need a reference to the subclass to dispose it. Asking the meta class for its
-           class name returns the actual class name, which we can then use to look up the class...
-        */
-        const char *createdSubclassName = object_getClassName(mockedClass);
-        Class createdSubclass = objc_lookUpClass(createdSubclassName);
-
-        OCMSetAssociatedMockForClass(nil, mockedClass);
-        object_setClass(mockedClass, originalMetaClass);
-        originalMetaClass = nil;
-
-        objc_disposeClassPair(createdSubclass);
+        [self stopMockingClassMethods];
+    }
+    if(classCreatedForNewMetaClass != nil)
+    {
+        OCMDisposeSubclass(classCreatedForNewMetaClass);
+        classCreatedForNewMetaClass = nil;
     }
     [super stopMocking];
 }
+
+
+- (void)stopMockingClassMethods
+{
+    OCMSetAssociatedMockForClass(nil, mockedClass);
+    object_setClass(mockedClass, originalMetaClass);
+    originalMetaClass = nil;
+    /* created meta class will be disposed later because partial mocks create another subclass depending on it */
+}
+
 
 - (void)addStub:(OCMInvocationStub *)aStub
 {
@@ -95,14 +102,14 @@
     /* if there is another mock for this exact class, stop it */
     id otherMock = OCMGetAssociatedMockForClass(mockedClass, NO);
     if(otherMock != nil)
-        [otherMock stopMocking];
+        [otherMock stopMockingClassMethods];
 
     OCMSetAssociatedMockForClass(self, mockedClass);
 
     /* dynamically create a subclass and use its meta class as the meta class for the mocked class */
-    Class subclass = OCMCreateSubclass(mockedClass, mockedClass);
+    classCreatedForNewMetaClass = OCMCreateSubclass(mockedClass, mockedClass);
     originalMetaClass = object_getClass(mockedClass);
-    id newMetaClass = object_getClass(subclass);
+    id newMetaClass = object_getClass(classCreatedForNewMetaClass);
 
     /* create a dummy initialize method */
     Method myDummyInitializeMethod = class_getInstanceMethod([self mockObjectClass], @selector(initializeForClassObject));
@@ -119,16 +126,13 @@
 
     /* adding forwarder for most class methods (instance methods on meta class) to allow for verify after run */
     NSArray *methodBlackList = @[@"class", @"forwardingTargetForSelector:", @"methodSignatureForSelector:", @"forwardInvocation:", @"isBlock",
-            @"instanceMethodForwarderForSelector:", @"instanceMethodSignatureForSelector:"];
+            @"instanceMethodForwarderForSelector:", @"instanceMethodSignatureForSelector:", @"resolveClassMethod:"];
     [NSObject enumerateMethodsInClass:originalMetaClass usingBlock:^(Class cls, SEL sel) {
         if((cls == object_getClass([NSObject class])) || (cls == [NSObject class]) || (cls == object_getClass(cls)))
             return;
-        NSString *className = NSStringFromClass(cls);
-        NSString *selName = NSStringFromSelector(sel);
-        if(([className hasPrefix:@"NS"] || [className hasPrefix:@"UI"]) &&
-           ([selName hasPrefix:@"_"] || [selName hasSuffix:@"_"]))
+        if(OCMIsApplePrivateMethod(cls, sel))
             return;
-        if([methodBlackList containsObject:selName])
+        if([methodBlackList containsObject:NSStringFromSelector(sel)])
             return;
         @try
         {
@@ -140,6 +144,7 @@
         }
     }];
 }
+
 
 - (void)setupForwarderForClassMethodSelector:(SEL)selector
 {
@@ -153,8 +158,8 @@
 
     Class metaClass = object_getClass(mockedClass);
     IMP forwarderIMP = [originalMetaClass instanceMethodForwarderForSelector:selector];
-    class_replaceMethod(metaClass, selector, forwarderIMP, types);
     class_addMethod(metaClass, aliasSelector, originalIMP, types);
+    class_replaceMethod(metaClass, selector, forwarderIMP, types);
 }
 
 

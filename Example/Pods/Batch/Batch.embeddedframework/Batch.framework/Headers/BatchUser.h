@@ -3,14 +3,14 @@
 //  Batch
 //
 //  https://batch.com
-//  Copyright (c) 2015 Batch SDK. All rights reserved.
+//  Copyright (c) Batch SDK. All rights reserved.
 //
 
 #import <Foundation/Foundation.h>
 #import <CoreLocation/CoreLocation.h>
 #import "BatchEventData.h"
 
-@class BatchUserDataEditor;
+@class BatchUserDataEditor, BatchUserAttribute;
 
 /**
  Batch's User Module
@@ -33,6 +33,37 @@
  @return A BatchUserDataEditor instance
  */
 + (nonnull BatchUserDataEditor*)editor;
+
+/**
+ @return The custom language set with @p BatchUserDataEditor. Defaults to the language detected by the SDK.
+ */
++ (nonnull NSString *)language;
+
+/**
+ @return The region set with @p BatchUserDataEditor. Defaults to the region detected by the SDK.
+ */
++ (nonnull NSString *)region;
+
+/**
+ @return The custom identifier set with @p BatchUserDataEditor, or nil if non was set.
+ */
++ (nullable NSString *)identifier;
+
+/**
+ Read the saved attributes. Reading is asynchronous so as not to interfere with saving operations.
+ 
+ @param completionHandler Completion block that contains a dictionary of attributes. The keys are the ones used when setting the attributes, the values are of type BatchUserAttribute. See BatchUserAttribute for more information.
+ */
++ (void)fetchAttributes:(void (^_Nonnull)(NSDictionary<NSString*, BatchUserAttribute*>* _Nullable attributes))completionHandler;
+
+/**
+ Read the saved tag collections. Reading is asynchronous so as not to interfere with saving operations.
+ 
+ @param completionHandler Completion block that contains a dictionary of sets of tags. The keys are the ones used when setting the tags collections.
+ 
+ @note Tags are saved in lowercase.
+ */
++ (void)fetchTagCollections:(void (^_Nonnull)(NSDictionary<NSString*, NSSet<NSString*>*>* _Nullable collections))completionHandler;
 
 /**
  Track an event

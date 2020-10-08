@@ -3,7 +3,7 @@
 //  Batch
 //
 //  https://batch.com
-//  Copyright (c) 2016 Batch SDK. All rights reserved.
+//  Copyright (c) Batch SDK. All rights reserved.
 //
 
 #import <Foundation/Foundation.h>
@@ -82,7 +82,7 @@ typedef void (^BatchUserActionBlock)(NSString* _Nonnull identifier, NSDictionary
 /**
  Unregister an action from Batch.
  
- Trying to unregister an action that has not be unregistered will silently fail.
+ Trying to unregister an action that has not be registered will silently fail.
  Note that trying to unregister an action that starts with "batch." will fail silently.
  
  @param actionIdentifier The action's identifier. Not case-sensitive
