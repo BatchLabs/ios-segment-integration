@@ -12,7 +12,7 @@ Pod::Spec.new do |s|
   s.author           = { 'Batch.com' => 'support@batch.com' }
   s.source           = { :git => 'https://github.com/BatchLabs/ios-segment-integration.git', :tag => s.version.to_s }
 
-  s.ios.deployment_target = '8.0'
+  s.ios.deployment_target = '10.0'
   s.requires_arc = true
   s.static_framework = true
   
