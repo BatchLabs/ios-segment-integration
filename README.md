@@ -1,5 +1,11 @@
 # Batch Segment Integration
 
+# Deprecation notice
+
+This integraion has been deprecated and does not work with recent Segment SDKs. Please contact us for more info on how to connect Segment and Batch depending on your usecase.
+
+======================================
+
 [![Version](https://img.shields.io/cocoapods/v/Segment-Batch.svg?style=flat)](http://cocoapods.org/pods/Segment-batch)
 [![License](https://img.shields.io/cocoapods/l/Segment-Batch.svg?style=flat)](http://cocoapods.org/pods/Segment-batch)
 
